@@ -1,0 +1,15 @@
+Source: salt-formula-rundeck
+Maintainer: Ilya Kharin <ikharin@mirantis.com>
+Section: admin
+Priority: optional
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
+Homepage: http://mirantis.com
+Vcs-Browser: https://gerrit.mcp.mirantis.net/gitweb?p=salt-formulas%2Frundeck.git
+Vcs-Git: https://gerrit.mcp.mirantis.net/salt-formulas/rundeck
+
+Package: salt-formula-rundeck
+Architecture: all
+Depends: ${misc:Depends}, salt-master, reclass
+Description: rundeck salt formula
+ Install and configure Rundeck.

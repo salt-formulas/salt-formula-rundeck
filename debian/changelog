@@ -1,0 +1,5 @@
+salt-formula-rundeck (2017.4) xenial; urgency=medium
+
+  * Initial version
+
+   -- Ilya Kharin <ikharin@mirantis.com>  Fri, 07 Apr 2017 15:34:33 +0400
