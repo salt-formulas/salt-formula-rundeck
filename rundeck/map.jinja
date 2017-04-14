@@ -1,0 +1,26 @@
+{%- set server = salt['grains.filter_by']({
+  'Debian': {
+    'home_dir': '/var/lib/rundeck',
+    'root_dir': '/srv/rundeck',
+    'secure': False,
+    'user': {
+      'name': 'rundeck',
+      'group': 'rundeck',
+    },
+    'ssh': {
+      'user': 'rundeck',
+      'timeout': 60000,
+    },
+    'api': {
+        'port': 4440,
+        'https': False,
+    },
+    'users': {},
+    'tokens': {},
+  },
+}, merge=salt['pillar.get']('rundeck:server')) %}
+
+{% macro make_url(endpoint) -%}
+{%- if endpoint.get('https', False) -%}https://{%- else -%}http://{%- endif -%}
+{{ endpoint.hostname }}:{{ endpoint.port }}
+{%- endmacro %}
