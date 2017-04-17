@@ -44,9 +44,9 @@ rundeck_root_dir:
     - require:
       - user: rundeck_user
 
-rundeck_config_dir:
+rundeck_etc_dir:
   file.directory:
-    - name: {{ server.root_dir }}/config
+    - name: {{ server.root_dir }}/etc
     - user: rundeck
     - group: rundeck
     - mode: 755
@@ -55,46 +55,46 @@ rundeck_config_dir:
 
 rundeck_framework_properties:
   file.managed:
-    - name: {{ server.root_dir }}/config/framework.properties
+    - name: {{ server.root_dir }}/etc/framework.properties
     - source: salt://rundeck/files/framework.properties
     - template: jinja
     - user: rundeck
     - group: rundeck
     - mode: 640
     - require:
-      - file: rundeck_config_dir
+      - file: rundeck_etc_dir
 
 rundeck_tokens_properties:
   file.managed:
-    - name: {{ server.root_dir }}/config/tokens.properties
+    - name: {{ server.root_dir }}/etc/tokens.properties
     - source: salt://rundeck/files/tokens.properties
     - template: jinja
     - user: rundeck
     - group: rundeck
     - mode: 640
     - require:
-      - file: rundeck_config_dir
+      - file: rundeck_etc_dir
 
 rundeck_realm_properties:
   file.managed:
-    - name: {{ server.root_dir }}/config/realm.properties
+    - name: {{ server.root_dir }}/etc/realm.properties
     - source: salt://rundeck/files/realm.properties
     - template: jinja
     - user: rundeck
     - group: rundeck
     - mode: 640
     - require:
-      - file: rundeck_config_dir
+      - file: rundeck_etc_dir
 
 rundeck_rundeck_properties:
   file.managed:
-    - name: {{ server.root_dir }}/config/rundeck-config.properties
+    - name: {{ server.root_dir }}/etc/rundeck-config.properties
     - source: salt://rundeck/files/rundeck-config.properties
     - template: jinja
     - user: rundeck
     - group: rundeck
     - mode: 640
     - require:
-      - file: rundeck_config_dir
+      - file: rundeck_etc_dir
 
 {%- endif %}
