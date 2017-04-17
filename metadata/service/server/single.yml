@@ -12,7 +12,7 @@ parameters:
       enabled: true
       users:
         admin:
-          username: ${_param:rundeck_admin_username}
+          name: ${_param:rundeck_admin_username}
           password: ${_param:rundeck_admin_password}
           roles:
             - user
