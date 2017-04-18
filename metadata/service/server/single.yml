@@ -1,12 +1,9 @@
 applications:
   - rundeck
 classes:
+  - service.rundeck.common
   - service.rundeck.support
 parameters:
-  _param:
-    rundeck_admin_username: admin
-    rundeck_admin_password: password
-    rundeck_admin_token: password
   rundeck:
     server:
       enabled: true

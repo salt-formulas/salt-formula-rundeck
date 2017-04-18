@@ -2,7 +2,6 @@
   'Debian': {
     'home_dir': '/var/lib/rundeck',
     'root_dir': '/srv/rundeck',
-    'secure': False,
     'user': {
       'name': 'rundeck',
       'group': 'rundeck',
@@ -20,7 +19,9 @@
   },
 }, merge=salt['pillar.get']('rundeck:server')) %}
 
+{%- set client = salt['pillar.get']('rundeck:client') %}
+
 {% macro make_url(endpoint) -%}
 {%- if endpoint.get('https', False) -%}https://{%- else -%}http://{%- endif -%}
-{{ endpoint.hostname }}:{{ endpoint.port }}
+{{ endpoint.host }}:{{ endpoint.port }}
 {%- endmacro %}

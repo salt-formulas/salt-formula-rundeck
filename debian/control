@@ -10,6 +10,6 @@ Vcs-Git: https://gerrit.mcp.mirantis.net/salt-formulas/rundeck
 
 Package: salt-formula-rundeck
 Architecture: all
-Depends: ${misc:Depends}, salt-master, reclass
+Depends: ${misc:Depends}, salt-master, reclass, python-requests
 Description: rundeck salt formula
  Install and configure Rundeck.

@@ -1,0 +1,11 @@
+{%- from "rundeck/map.jinja" import client with context %}
+
+{%- for node in client.project.get(project_name, {}).get("node", {}).values() %}
+
+{{ node.nodename }}:
+  hostname: {{ node.hostname }}
+  nodename: {{ node.nodename }}
+  username: {{ node.username }}
+  tags: {{ node.get("tags", [])|yaml }}
+
+{%- endfor %}

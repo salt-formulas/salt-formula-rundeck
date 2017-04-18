@@ -1,4 +1,4 @@
-{% from "rundeck/map.jinja" import server with context %}
+{%- from "rundeck/map.jinja" import server with context %}
 {%- if server.enabled|default(False) %}
 
 rundeck_group:
@@ -13,7 +13,7 @@ rundeck_user:
   user.present:
     - name: {{ server.user.name }}
     - home: {{ server.home_dir }}
-    - shell: /bin/bash
+    - shell: /bin/false
     {%- if server.user.uid is defined %}
     - uid: {{ server.user.uid }}
     {%- endif %}
@@ -22,15 +22,15 @@ rundeck_user:
     {%- endif %}
     - system: True
     - groups:
-      - rundeck
+      - {{ server.user.group }}
     - require:
       - group: rundeck_group
 
 rundeck_home_dir:
   file.directory:
     - name: {{ server.home_dir }}
-    - user: rundeck
-    - group: rundeck
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
     - mode: 755
     - require:
       - user: rundeck_user
@@ -38,17 +38,31 @@ rundeck_home_dir:
 rundeck_root_dir:
   file.directory:
     - name: {{ server.root_dir }}
-    - user: rundeck
-    - group: rundeck
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
     - mode: 755
     - require:
       - user: rundeck_user
 
+rundeck_lib_dirs:
+  file.directory:
+    - names:
+      - {{ server.root_dir }}/log
+      - {{ server.root_dir }}/logs
+      - {{ server.root_dir }}/plugins
+      - {{ server.root_dir }}/rundeck
+      - {{ server.root_dir }}/storage
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
+    - mode: 755
+    - require:
+      - file: rundeck_root_dir
+
 rundeck_etc_dir:
   file.directory:
     - name: {{ server.root_dir }}/etc
-    - user: rundeck
-    - group: rundeck
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
     - mode: 755
     - require:
       - user: rundeck_user
@@ -58,8 +72,8 @@ rundeck_framework_properties:
     - name: {{ server.root_dir }}/etc/framework.properties
     - source: salt://rundeck/files/framework.properties
     - template: jinja
-    - user: rundeck
-    - group: rundeck
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
     - mode: 640
     - require:
       - file: rundeck_etc_dir
@@ -69,8 +83,8 @@ rundeck_tokens_properties:
     - name: {{ server.root_dir }}/etc/tokens.properties
     - source: salt://rundeck/files/tokens.properties
     - template: jinja
-    - user: rundeck
-    - group: rundeck
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
     - mode: 640
     - require:
       - file: rundeck_etc_dir
@@ -80,8 +94,8 @@ rundeck_realm_properties:
     - name: {{ server.root_dir }}/etc/realm.properties
     - source: salt://rundeck/files/realm.properties
     - template: jinja
-    - user: rundeck
-    - group: rundeck
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
     - mode: 640
     - require:
       - file: rundeck_etc_dir
@@ -91,10 +105,30 @@ rundeck_rundeck_properties:
     - name: {{ server.root_dir }}/etc/rundeck-config.properties
     - source: salt://rundeck/files/rundeck-config.properties
     - template: jinja
-    - user: rundeck
-    - group: rundeck
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
     - mode: 640
     - require:
       - file: rundeck_etc_dir
+
+rundeck_ssh_dir:
+  file.directory:
+    - name: {{ server.root_dir }}/rundeck/.ssh
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
+    - mode: 700
+    - require:
+      - file: rundeck_root_dir
+
+rundeck_ssh_private_key:
+  file.managed:
+    - name: {{ server.root_dir }}/rundeck/.ssh/id_rsa
+    - source: salt://rundeck/files/private_key
+    - template: jinja
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
+    - mode: 600
+    - require:
+      - file: rundeck_ssh_dir
 
 {%- endif %}

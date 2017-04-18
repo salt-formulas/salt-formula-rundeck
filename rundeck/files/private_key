@@ -1,0 +1,1 @@
+{%- from "rundeck/map.jinja" import server with context -%}{{ server.ssh.private_key }}
