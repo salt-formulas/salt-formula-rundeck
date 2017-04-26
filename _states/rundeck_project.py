@@ -3,6 +3,16 @@ import logging
 LOG = logging.getLogger(__name__)
 
 
+def __virtual__():
+    if 'rundeck.get_project' not in __salt__:
+        return (
+            False,
+            'The rundeck_project state module cannot be loaded: rundeck is '
+            'unavailable',
+        )
+    return True
+
+
 def present(name, description=''):
     ret = {
         'name': name,
