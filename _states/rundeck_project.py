@@ -36,13 +36,13 @@ def present(name, description=''):
             LOG.warning("{}: {}".format(project["config"], config))
             __salt__['rundeck.update_project_config'](name, project, config)
             ret['comment'] = "Project {} was updated.".format(name)
-            ret['changes'][name] = "UPDATED"
+            ret['changes'][name] = 'UPDATED'
         else:
             ret['comment'] = "Project {} is already up to date.".format(name)
     else:
         __salt__['rundeck.create_project'](name, params)
         ret['comment'] = "Project {} was created.".format(name)
-        ret['changes'][name] = "CREATED"
+        ret['changes'][name] = 'CREATED'
     ret['result'] = True
     return ret
 
