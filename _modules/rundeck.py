@@ -251,6 +251,58 @@ def perform_scm_import(project_name, plugin, params):
         .format(project_name, resp.status_code, resp.text))
 
 
+# Key Store
+
+def get_secret_metadata(path):
+    session, make_url = get_session()
+    resp = session.get(
+        make_url("/api/11/storage/keys/{}".format(path)),
+        allow_redirects=False,
+    )
+    if resp.status_code == 200:
+        return True, resp.json()
+    elif resp.status_code == 404:
+        return True, None
+    return False, (
+        "Could not retrieve metadata for the {} secret key: {}/{}"
+        .format(path, resp.status_code, resp.text))
+
+
+def upload_secret(path, type, content, update=False):
+    session, make_url = get_session()
+    session.headers['Content-Type'] = SECRET_CONTENT_TYPE[type]
+    method = session.put if update else session.post
+    resp = method(
+        make_url("/api/11/storage/keys/{}".format(path)),
+        data=content,
+        allow_redirects=False,
+    )
+    if resp.status_code in (200, 201):
+        return True, resp.json()
+    return False, (
+        "Could not create or update the {} secret key with the type {}: {}/{}"
+        .format(path, type, resp.status_code, resp.text))
+
+SECRET_CONTENT_TYPE = {
+    "private": "application/octet-stream",
+    "public": "application/pgp-keys",
+    "password": "application/x-rundeck-data-password",
+}
+
+
+def delete_secret(path):
+    session, make_url = get_session()
+    resp = session.delete(
+        make_url("/api/11/storage/keys/{}".format(path)),
+        allow_redirects=False,
+    )
+    if resp.status_code == 204:
+        return True, None
+    return False, (
+        "Could not delete the {} secret key: {}/{}"
+        .format(path, resp.status_code, resp.text))
+
+
 # Utils
 
 def create_project_config(project_name, params, config=None):

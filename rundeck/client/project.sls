@@ -1,4 +1,4 @@
-{% from "rundeck/map.jinja" import server with context %}
+{%- from "rundeck/map.jinja" import server with context %}
 {%- from "rundeck/map.jinja" import client with context %}
 
 {%- for name, project in client.project.items() %}

@@ -19,3 +19,20 @@ rundeck:
           import:
             address: http://gerrit.cluster.local/jobs/rundeck-jobs.git
             branch: master
+    secret:
+      openstack/auth_url:
+        type: password
+        content: http://openstack.cluster.local/identity/v3/auth/tokens
+      openstack/username:
+        type: password
+        content: admin
+      openstack/password:
+        type: password
+        content: password
+      openstack/project_name:
+        type: password
+        content: admin
+      openstack/keypair:
+        enabled: false
+      ssh/runbook:
+        enabled: false

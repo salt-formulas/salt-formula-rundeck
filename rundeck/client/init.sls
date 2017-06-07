@@ -5,6 +5,9 @@ include:
 {%- if client.project is defined %}
   - rundeck.client.project
 {%- endif %}
+{%- if client.secret is defined %}
+  - rundeck.client.secret
+{%- endif %}
 {%- endif %}
 
 {%- if grains.get('noservices', False) %}

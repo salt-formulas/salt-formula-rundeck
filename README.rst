@@ -84,6 +84,40 @@ To configure Rundeck to use PostgreSQL instead of H2:
 Configure Client
 ~~~~~~~~~~~~~~~~
 
+Configure Secret Keys
+^^^^^^^^^^^^^^^^^^^^^
+
+It is possible to configure secret items in Key Storage in Rundeck:
+
+.. code-block:: yaml
+
+     rundeck:
+       client:
+         enabled: true
+         secret:
+           openstack/username:
+             type: password
+             content: admin
+           openstack/password:
+             type: password
+             content: password
+           openstack/keypair/private:
+             type: private
+             content: <private>
+           openstack/keypair/public:
+             type: public
+             content: <public>
+
+It is possible to disable keys to be sure that they are not present in Rundeck:
+
+.. code-block:: yaml
+
+    rundeck:
+       client:
+         secret:
+           openstack/username:
+             enabled: false
+
 Configure Projects
 ^^^^^^^^^^^^^^^^^^
 
