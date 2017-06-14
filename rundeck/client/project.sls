@@ -9,6 +9,9 @@ rundeck-{{ project_name }}-project:
   rundeck_project.present:
     - name: {{ project_name }}
     - description: {{ project.description|default('') }}
+    {%- if grains.get('noservices', False) %}
+    - onlyif: 'false'
+    {%- endif %}
 
 rundeck-{{ project_name }}-resources:
   file.managed:
@@ -22,6 +25,9 @@ rundeck-{{ project_name }}-resources:
         project_name: {{ project_name }}
     - require:
       - rundeck_project: rundeck-{{ project_name }}-project
+    {%- if grains.get('noservices', False) %}
+    - onlyif: 'false'
+    {%- endif %}
 
 {%- set plugin = project.plugin|default({}) %}
 
@@ -48,6 +54,9 @@ rundeck-{{ project_name }}-scm-import:
 {%- endif %}
     - require:
       - rundeck_project: rundeck-{{ project_name }}-project
+    {%- if grains.get('noservices', False) %}
+    - onlyif: 'false'
+    {%- endif %}
 
 rundeck-{{ project_name }}-scm-import-enable:
   rundeck_scm.enabled_import:
@@ -55,6 +64,9 @@ rundeck-{{ project_name }}-scm-import-enable:
     - project_name: {{ project_name }}
     - require:
       - rundeck_scm: rundeck-{{ project_name }}-scm-import
+    {%- if grains.get('noservices', False) %}
+    - onlyif: 'false'
+    {%- endif %}
 
 rundeck-{{ project_name }}-scm-import-sync:
   rundeck_scm.sync_import:
@@ -67,6 +79,9 @@ rundeck-{{ project_name }}-scm-import-sync:
       - rundeck_scm: rundeck-{{ project_name }}-scm-import
     - watch:
       - rundeck_scm: rundeck-{{ project_name }}-scm-import-enable
+    {%- if grains.get('noservices', False) %}
+    - onlyif: 'false'
+    {%- endif %}
 
 {%- endif %}
 

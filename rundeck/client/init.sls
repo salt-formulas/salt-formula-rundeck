@@ -6,3 +6,8 @@ include:
   - rundeck.client.project
 {%- endif %}
 {%- endif %}
+
+{%- if grains.get('noservices', False) %}
+rundeck-client-nop:
+  test.nop: []
+{%- endif %}
