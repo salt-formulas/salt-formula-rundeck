@@ -19,15 +19,13 @@ def get_project(name):
     elif status_code == 404:
         return None
     raise salt.exceptions.SaltInvocationError(
-        "Could not retrieve information about project {} from Rundeck {}: {}"
-        .format(name, make_url.base_url, status_code))
+        "Could not retrieve information about project {} from Rundeck {}: "
+        "{}/{}".format(name, make_url.base_url, status_code, resp.text))
 
 
 def create_project(name, params):
     session, make_url = get_session()
     config = create_project_config(name, params)
-    LOG.debug("create_project: %s", name)
-    LOG.warning("create_project.config: %s/%s", name, config)
     resp = session.post(
         make_url("/api/18/projects"),
         json={
@@ -38,7 +36,6 @@ def create_project(name, params):
     )
     if resp.status_code == 201:
         return resp.json()
-    LOG.debug("create_project: %s", name)
 
 
 def update_project_config(name, project, config):
@@ -50,7 +47,6 @@ def update_project_config(name, project, config):
     )
     if resp.status_code == 201:
         return resp.json()
-    LOG.debug("update_project: %s", name)
 
 
 def delete_project(name):
@@ -59,8 +55,8 @@ def delete_project(name):
     status_code = resp.status_code
     if status_code != 204:
         raise salt.exceptions.SaltInvocationError(
-            "Could not remove project {} from Rundeck {}: {}"
-            .format(name, make_url.base_url, status_code))
+            "Could not remove project {} from Rundeck {}: {}/{}"
+            .format(name, make_url.base_url, status_code, resp.text))
 
 
 # SCM
@@ -74,8 +70,8 @@ def get_plugin(project_name, integration):
     elif resp.status_code == 404:
         return True, None
     return False, (
-        "Could not get config for the {} plugin of the {} project"
-        .format(integration, project_name))
+        "Could not get config for the {} plugin of the {} project: {}"
+        .format(integration, project_name, resp.text))
 
 
 def get_plugin_status(project_name, integration):
@@ -83,8 +79,12 @@ def get_plugin_status(project_name, integration):
         for plugin in plugins:
             if plugin['type'] == plugin_type:
                 return plugin
+        LOG.debug(
+            "Could not find the %s integration among available plugins of "
+            "the %s projects: %s", integration, project_name, plugins)
         raise salt.exceptions.SaltInvocationError(
-            "Could not find status for the {}/{} plugin of the {} project"
+            "Could not find status for the {}/{} plugin of the {} project, "
+            "this integration is not available in your deployment."
             .format(integration, plugin_type, project_name))
 
     session, make_url = get_session()
@@ -95,8 +95,8 @@ def get_plugin_status(project_name, integration):
         status = get_plugin(resp.json()['plugins'], plugin_type)
         return True, status
     return False, (
-        "Could not get status for the {} plugin of the {} project"
-        .format(integration, project_name))
+        "Could not get status for the {} plugin of the {} project: {}"
+        .format(integration, project_name, resp.text))
 
 
 def get_plugin_state(project_name, integration):
@@ -106,8 +106,8 @@ def get_plugin_state(project_name, integration):
     if resp.status_code == 200:
         return True, resp.json()
     return False, (
-        "Could not get state for the {} plugin of the {} project"
-        .format(integration, project_name))
+        "Could not get state for the {} plugin of the {} project: {}"
+        .format(integration, project_name, resp.text))
 
 
 def disable_plugin(project_name, integration):
@@ -119,8 +119,8 @@ def disable_plugin(project_name, integration):
         msg = resp.json()
         return True, msg['message']
     return False, (
-        "Could not disable the {} plugin for the {} project: {}"
-        .format(integration, project_name, resp.status_code))
+        "Could not disable the {} plugin for the {} project: {}/{}"
+        .format(integration, project_name, resp.status_code, resp.text))
 
 
 def enable_plugin(project_name, integration):
@@ -132,8 +132,8 @@ def enable_plugin(project_name, integration):
         msg = resp.json()
         return True, msg['message']
     return False, (
-        "Could not enable the {} plugin for the {} project: {}"
-        .format(integration, project_name, resp.status_code))
+        "Could not enable the {} plugin for the {} project: {}/{}"
+        .format(integration, project_name, resp.status_code, resp.text))
 
 
 # SCM Import
