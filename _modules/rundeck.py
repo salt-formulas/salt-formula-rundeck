@@ -365,11 +365,21 @@ def get_session():
         return urljoin(make_url.base_url, url)
 
     rundeck_url = __salt__['config.get']('rundeck.url')
-    make_url.base_url = rundeck_url
-
     api_token = __salt__['config.get']('rundeck.api_token')
     username = __salt__['config.get']('rundeck.username')
     password = __salt__['config.get']('rundeck.password')
+
+    if not rundeck_url:
+        raise salt.exceptions.SaltInvocationError(
+            "The 'rundeck.url' parameter have to be set as non-empty value in "
+            "the minion's configuration file.")
+    elif not (api_token or username and password):
+        raise salt.exceptions.SaltInvocationError(
+            "Either the 'rundeck.api_token' parameter or a pair of "
+            "'rundeck.username' and 'rundeck.password' parameters have to be "
+            "set as non-empty values in the minion's configuration file.")
+
+    make_url.base_url = rundeck_url
 
     session = requests.Session()
 
