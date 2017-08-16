@@ -10,7 +10,7 @@ rundeck-key-{{ path|replace('/', '-') }}-create:
   rundeck_secret.present:
     - name: {{ path }}
     - type: {{ secret['type'] }}
-    - content: {{ secret['content'] }}
+    - content: {{ secret['content'] | yaml_encode }}
     {%- if grains.get('noservices', False) %}
     - onlyif: 'false'
     {%- endif %}
