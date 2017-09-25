@@ -55,6 +55,10 @@ rundeck_lib_dirs:
     - user: {{ server.user.name }}
     - group: {{ server.user.group }}
     - mode: 755
+    - recurse:
+      - user
+      - group
+      - mode
     - require:
       - file: rundeck_root_dir
 
