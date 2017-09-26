@@ -62,6 +62,21 @@ rundeck_lib_dirs:
     - require:
       - file: rundeck_root_dir
 
+rundeck_os_credentials_dir:
+  file.directory:
+    - names:
+      - {{ server.root_dir }}/storage/content/keys/cis/openstack
+    - user: {{ server.user.name }}
+    - group: {{ server.user.group }}
+    - mode: 755
+    - makedirs: True
+    - recurse:
+      - user
+      - group
+      - mode
+    - require:
+      - file: rundeck_root_dir
+
 rundeck_etc_dir:
   file.directory:
     - name: {{ server.root_dir }}/etc
