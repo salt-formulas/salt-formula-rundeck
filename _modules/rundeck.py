@@ -399,7 +399,7 @@ def get_session():
                 '/user/error' in resp.url or
                 '/user/login' in resp.url):
             raise salt.exceptions.SaltInvocationError(
-                "Username/passowrd authorization failed in Rundeck {} for "
+                "Username/password authorization failed in Rundeck {} for "
                 "user {}".format(rundeck_url, username))
     session.params.update({
         'format': 'json',
