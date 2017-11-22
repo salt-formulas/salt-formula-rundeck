@@ -12,6 +12,11 @@ rundeck:
       user: runbook
       private_key: private
       public_key: public
+    iframe:
+      external_forward: false
+      host: 10.20.0.3
+      port: 4440
+      https: false
     users:
       admin:
         name: admin

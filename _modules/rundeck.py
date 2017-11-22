@@ -385,7 +385,6 @@ def get_session():
 
     if api_token:
         session.headers.update({
-            'Content-Type': 'application/json',
             'X-Rundeck-Auth-Token': api_token,
         })
     else:
