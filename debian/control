@@ -10,6 +10,6 @@ Vcs-Git: https://github.com/salt-formulas/salt-formula-rundeck.git
 
 Package: salt-formula-rundeck
 Architecture: all
-Depends: ${misc:Depends}, salt-master, reclass, python-requests
+Depends: ${misc:Depends}, python-requests
 Description: rundeck salt formula
  Install and configure Rundeck.
