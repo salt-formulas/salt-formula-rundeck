@@ -49,6 +49,7 @@ rundeck_lib_dirs:
     - names:
       - {{ server.root_dir }}/log
       - {{ server.root_dir }}/logs
+      - {{ server.root_dir }}/data
       - {{ server.root_dir }}/plugins
       - {{ server.root_dir }}/rundeck
       - {{ server.root_dir }}/storage
