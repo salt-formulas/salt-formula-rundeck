@@ -1,5 +1,5 @@
 minion:
-  {%- if pillar.rundeck.client is defined %}
+  {%- if pillar.get('rundeck', {}).client is defined %}
   rundeck:
     {%- from "rundeck/map.jinja" import client with context %}
     {%- from "rundeck/map.jinja" import make_url with context %}
